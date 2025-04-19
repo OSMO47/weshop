@@ -1,0 +1,102 @@
+/* Products Page Styles */
+.container {
+    padding: 20px;
+    max-width: 1200px;
+  }
+  
+  /* Filter Section */
+  .filter-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+  }
+  
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  
+  .form-label {
+    font-weight: 500;
+    color: #2d3e50;
+  }
+  
+  /* Product Grid */
+  .row {
+    gap: 20px 0;
+  }
+  
+  .product-card-col {
+    transition: transform 0.2s ease;
+  }
+  
+  .product-card-col:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* No Products Found */
+  .no-products {
+    padding: 50px 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+  }
+  
+  .no-products h4 {
+    color: #2d3e50;
+    margin-bottom: 15px;
+  }
+  
+  .no-products .text-muted {
+    color: #6c757d;
+  }
+  
+  .fa-search {
+    color: #6c757d;
+  }
+  
+  /* Loading Spinner */
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+  }
+  
+  /* SweetAlert Customization */
+  .swal2-popup {
+    border-radius: 15px !important;
+  }
+  
+  .swal2-input,
+  .swal2-select,
+  .swal2-textarea {
+    border: 1px solid #dee2e6 !important;
+    border-radius: 5px !important;
+    padding: 8px 12px !important;
+  }
+  
+  .swal2-radio label {
+    margin-right: 15px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .filter-card .row {
+      gap: 15px;
+    }
+    
+    .product-card-col {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .form-select {
+      margin-top: 10px;
+    }
+    
+    .no-products {
+      padding: 30px 15px;
+    }
+  }
