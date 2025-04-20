@@ -16,7 +16,6 @@ export async function POST(request) {
              return NextResponse.json({ success: true, message: "Login successful (INSECURE - Placeholder!)" });
 
         } else {
-            // Invalid credentials
             return NextResponse.json({ success: false, message: "Invalid username or password" }, { status: 401 }); // Unauthorized
         }
 

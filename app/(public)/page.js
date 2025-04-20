@@ -7,7 +7,6 @@ import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
-// Fixed debounce function implementation
 function debounce(func, wait) {
   let timeout;
   return function (...args) {
