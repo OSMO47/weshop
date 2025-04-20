@@ -146,85 +146,346 @@ export default function SalesHistoryPage() {
         ? details
             .map(
               (d) => `
-        <tr>
-            <td>${d.Fur_ID}</td>
-            <td class="d-flex align-items-center">
-                 <img src="${d.image_url || "/placeholder.jpg"}" alt="${
+          <tr>
+              <td class="order-detail-cell order-detail-code">${d.Fur_ID}</td>
+              <td class="order-detail-cell order-detail-product">
+                  <img src="${d.image_url || "/placeholder.jpg"}" alt="${
                 d.Fur_name || "N/A"
-              }" width="40" height="40" class="img-thumbnail me-2" style="object-fit: cover;"/>
-                 <span>${d.Fur_name || "N/A"}</span>
-             </td>
-            <td class="text-center">${d.Qty}</td>
-            <td class="text-end">${parseFloat(d.Price || 0).toLocaleString(
-              "th-TH",
-              { minimumFractionDigits: 2 }
-            )}</td>
-            <td class="text-end fw-bold">${(
-              parseFloat(d.Price || 0) * parseInt(d.Qty || 0)
-            ).toLocaleString("th-TH", { minimumFractionDigits: 2 })}</td>
-        </tr>
-     `
+              }" class="order-detail-image"/>
+                  <span class="order-detail-product-name">${
+                    d.Fur_name || "N/A"
+                  }</span>
+              </td>
+              <td class="order-detail-cell order-detail-qty">${d.Qty}</td>
+              <td class="order-detail-cell order-detail-price">${parseFloat(
+                d.Price || 0
+              ).toLocaleString("th-TH", { minimumFractionDigits: 2 })}</td>
+              <td class="order-detail-cell order-detail-total">${(
+                parseFloat(d.Price || 0) * parseInt(d.Qty || 0)
+              ).toLocaleString("th-TH", { minimumFractionDigits: 2 })}</td>
+          </tr>
+       `
             )
             .join("")
-        : '<tr><td colspan="5" class="text-center text-muted">ไม่พบรายละเอียดสินค้า</td></tr>';
+        : '<tr><td colspan="5" class="order-detail-no-data">ไม่พบรายละเอียดสินค้า</td></tr>';
 
     Swal.fire({
-      title: `รายละเอียดออเดอร์ #${order.InvoiceID}`,
+      title: `<div class="order-detail-title"><i class="fas fa-receipt order-detail-icon"></i> รายละเอียดออเดอร์ #${order.InvoiceID}</div>`,
       html: `
-        <div class="text-start" style="max-height: 70vh; overflow-y: auto;">
-            <h6><i class="fas fa-user me-2"></i>ข้อมูลลูกค้า</h6>
-            <table class="table table-sm table-bordered mb-3">
-                <tbody>
-                    <tr><th style="width: 120px;">ชื่อ:</th><td>${
-                      order.CustName || "-"
-                    }</td></tr>
-                    <tr><th>โทรศัพท์:</th><td>${order.Phone || "-"}</td></tr>
-                    <tr><th>ที่อยู่:</th><td>${order.Address || "-"}</td></tr>
-                    <tr><th>วันที่สั่ง:</th><td>${new Date(
-                      order.orderDate
-                    ).toLocaleDateString("th-TH", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}</td></tr>
-                    <tr><th>การจัดส่ง:</th><td><span class="badge ${
+        <style>
+          .order-detail-container {
+            text-align: left;
+            max-height: 75vh;
+            overflow-y: auto;
+            padding: 0 8px;
+            font-family: 'Kanit', 'Sarabun', sans-serif;
+          }
+          
+          .order-detail-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+            color: #1e40af;
+          }
+          
+          .order-detail-icon {
+            margin-right: 0.5rem;
+            color: #3b82f6;
+          }
+          
+          .order-detail-section {
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+          }
+          
+          .order-detail-section-header {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+            color: #1e40af;
+          }
+          
+          .order-detail-section-icon {
+            margin-right: 0.5rem;
+            color: #3b82f6;
+          }
+          
+          .order-detail-info-table {
+            width: 100%;
+            margin-bottom: 1rem;
+            border-collapse: collapse;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          }
+          
+          .order-detail-info-table th, .order-detail-info-table td {
+            padding: 0.625rem 1rem;
+            border: 1px solid #e5e7eb;
+          }
+          
+          .order-detail-info-table th {
+            width: 30%;
+            background-color: #f9fafb;
+            font-weight: 500;
+            color: #4b5563;
+          }
+          
+          .order-detail-info-table td {
+            background-color: #fff;
+          }
+          
+          .order-detail-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+          }
+          
+          .order-detail-badge-pickup {
+            background-color: #e0f2fe;
+            color: #0369a1;
+          }
+          
+          .order-detail-badge-delivery {
+            background-color: #fef3c7;
+            color: #b45309;
+          }
+          
+          .order-detail-badge-icon {
+            margin-right: 0.25rem;
+          }
+          
+          .order-detail-products-table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+          }
+          
+          .order-detail-products-table thead {
+            background-color: #f3f4f6;
+          }
+          
+          .order-detail-products-table th {
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            color: #374151;
+            text-align: left;
+            border-bottom: 2px solid #e5e7eb;
+          }
+          
+          .order-detail-products-table th.text-center {
+            text-align: center;
+          }
+          
+          .order-detail-products-table th.text-end {
+            text-align: right;
+          }
+          
+          .order-detail-cell {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+          }
+          
+          .order-detail-code {
+            font-family: monospace;
+            color: #6b7280;
+          }
+          
+          .order-detail-product {
+            display: flex;
+            align-items: center;
+          }
+          
+          .order-detail-image {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 0.75rem;
+            border: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+          }
+          
+          .order-detail-product-name {
+            font-weight: 500;
+            color: #1f2937;
+          }
+          
+          .order-detail-qty {
+            text-align: center;
+            font-weight: 500;
+          }
+          
+          .order-detail-price {
+            text-align: right;
+            color: #6b7280;
+          }
+          
+          .order-detail-total {
+            text-align: right;
+            font-weight: 500;
+            color: #1f2937;
+          }
+          
+          .order-detail-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0.75rem 1rem;
+            background-color: #f3f4f6;
+            border-top: 2px solid #e5e7eb;
+          }
+          
+          .order-detail-grand-total-label {
+            margin-right: 1rem;
+            font-weight: 500;
+            color: #4b5563;
+          }
+          
+          .order-detail-grand-total-value {
+            font-weight: 600;
+            color: #1e40af;
+            font-size: 1.125rem;
+          }
+          
+          .order-detail-no-data {
+            text-align: center;
+            padding: 2rem;
+            color: #9ca3af;
+            font-style: italic;
+          }
+          
+          /* สำหรับ Responsive */
+          @media (max-width: 640px) {
+            .order-detail-info-table th {
+              width: 40%;
+            }
+            
+            .order-detail-product {
+              flex-direction: column;
+              align-items: flex-start;
+            }
+            
+            .order-detail-image {
+              margin-bottom: 0.5rem;
+              margin-right: 0;
+            }
+          }
+        </style>
+        
+        <div class="order-detail-container">
+          <div class="order-detail-section">
+            <h6 class="order-detail-section-header">
+              <i class="fas fa-user order-detail-section-icon"></i>ข้อมูลลูกค้า
+            </h6>
+            <table class="order-detail-info-table">
+              <tbody>
+                <tr>
+                  <th>ชื่อ:</th>
+                  <td>${order.CustName || "-"}</td>
+                </tr>
+                <tr>
+                  <th>โทรศัพท์:</th>
+                  <td>${order.Phone || "-"}</td>
+                </tr>
+                <tr>
+                  <th>ที่อยู่:</th>
+                  <td>${order.Address || "-"}</td>
+                </tr>
+                <tr>
+                  <th>วันที่สั่ง:</th>
+                  <td>${new Date(order.orderDate).toLocaleDateString("th-TH", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}</td>
+                </tr>
+                <tr>
+                  <th>การจัดส่ง:</th>
+                  <td>
+                    <span class="order-detail-badge ${
                       order.deliveryMethod === "pickup"
-                        ? "bg-info"
-                        : "bg-warning text-dark"
-                    }"><i class="fas ${
-        order.deliveryMethod === "pickup" ? "fa-store" : "fa-truck"
-      } me-1"></i>${
-        order.deliveryMethod === "pickup" ? "รับที่ร้าน" : "จัดส่ง"
-      }</span></td></tr>
-                </tbody>
+                        ? "order-detail-badge-pickup"
+                        : "order-detail-badge-delivery"
+                    }">
+                      <i class="fas ${
+                        order.deliveryMethod === "pickup"
+                          ? "fa-store"
+                          : "fa-truck"
+                      } order-detail-badge-icon"></i>
+                      ${
+                        order.deliveryMethod === "pickup"
+                          ? "รับที่ร้าน"
+                          : "จัดส่ง"
+                      }
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
             </table>
-
-            <h6><i class="fas fa-list me-2"></i>รายการสินค้า</h6>
-            <div class="table-responsive">
-                <table class="table table-sm table-bordered">
-                    <thead class="table-light">
-                        <tr><th>รหัส</th><th>สินค้า</th><th class="text-center">จำนวน</th><th class="text-end">ราคา/หน่วย (฿)</th><th class="text-end">รวม (฿)</th></tr>
-                    </thead>
-                    <tbody>${detailsHtml}</tbody>
-                    <tfoot>
-                        <tr class="table-light">
-                            <td colspan="4" class="text-end fw-bold">ยอดรวมสุทธิ:</td>
-                            <td class="text-end fw-bold fs-6">${parseFloat(
-                              order.TotalPrice || 0
-                            ).toLocaleString("th-TH", {
-                              minimumFractionDigits: 2,
-                            })} บาท</td>
-                        </tr>
-                    </tfoot>
-                </table>
+          </div>
+  
+          <div class="order-detail-section">
+            <h6 class="order-detail-section-header">
+              <i class="fas fa-box-open order-detail-section-icon"></i>รายการสินค้า
+            </h6>
+            <div class="order-detail-products-wrapper">
+              <table class="order-detail-products-table">
+                <thead>
+                  <tr>
+                    <th>รหัส</th>
+                    <th>สินค้า</th>
+                    <th class="text-center">จำนวน</th>
+                    <th class="text-end">ราคา/หน่วย (฿)</th>
+                    <th class="text-end">รวม (฿)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${detailsHtml}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5" class="order-detail-footer">
+                      <span class="order-detail-grand-total-label">ยอดรวมสุทธิ:</span>
+                      <span class="order-detail-grand-total-value">${parseFloat(
+                        order.TotalPrice || 0
+                      ).toLocaleString("th-TH", {
+                        minimumFractionDigits: 2,
+                      })} บาท</span>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
+          </div>
         </div>
         `,
       width: "90%",
+      padding: "1rem",
       customClass: {
-        popup: "swal2-popup-wide",
+        container: "order-detail-modal-container",
+        popup: "order-detail-modal-popup",
+        header: "order-detail-modal-header",
+        title: "order-detail-modal-title",
+        closeButton: "order-detail-modal-close",
+        content: "order-detail-modal-content",
+        confirmButton: "order-detail-modal-confirm-btn",
       },
+      showCloseButton: true,
       confirmButtonText: '<i class="fas fa-times me-1"></i>ปิด',
+      confirmButtonColor: "#3b82f6",
+      focusConfirm: false,
+      buttonsStyling: true,
     });
   };
 
@@ -693,7 +954,7 @@ export default function SalesHistoryPage() {
                   <th
                     style={{ ...styles.tableHeaderCell, textAlign: "center" }}
                   >
-                    การกระทำ
+                    รายละเอียดออเดอร์
                   </th>
                 </tr>
               </thead>
