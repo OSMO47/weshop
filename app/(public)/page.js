@@ -7,7 +7,14 @@ import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
+// Fixed debounce function implementation
 function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
 }
 
 export default function HomePage() {
@@ -51,9 +58,13 @@ export default function HomePage() {
     setFilteredProducts(filtered);
   }, [products, searchTerm, typeFilter, materialFilter]);
 
-  const debouncedFilter = useCallback(debounce(filterProducts, 300), [
-    filterProducts,
-  ]);
+  // Fix for the useCallback warning
+  const debouncedFilter = useCallback(() => {
+    const debouncedFn = debounce(() => {
+      filterProducts();
+    }, 300);
+    debouncedFn();
+  }, [filterProducts]);
 
   useEffect(() => {
     fetchData();
