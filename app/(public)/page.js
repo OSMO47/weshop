@@ -202,10 +202,14 @@ export default function HomePage() {
                 </span>
                 <input
                   type="text"
-                  className="form-control border-start-0"
+                  className="form-control form-control-sm border-start-0"
                   placeholder="ค้นหาสินค้า..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    width: "100%",
+                    borderRadius: "0 0.25rem 0.25rem 0",
+                  }}
                 />
               </div>
             </div>

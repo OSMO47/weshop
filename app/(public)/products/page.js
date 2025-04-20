@@ -48,7 +48,7 @@ export default function ProductsPage() {
       borderRadius: "6px",
       padding: "10px 12px",
       fontSize: "0.95rem",
-      width: "100%",
+      width: "80%",
       transition: "border-color 0.2s ease",
     },
     searchInput: {

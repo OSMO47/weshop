@@ -55,7 +55,7 @@ export default function Navbar() {
             padding: "0.25rem 0.75rem",
             fontSize: "1.25rem",
             borderRadius: "0.25rem",
-            display: "none", // ซ่อนไว้หากไม่ทำ responsive จริง
+            display: "none", 
           }}
         >
           <span className="navbar-toggler-icon"></span>

@@ -1,4 +1,3 @@
-// app/(admin)/stock/page.js
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -274,7 +273,7 @@ export default function StockPage() {
       transition: "all 0.2s ease",
       cursor: "pointer",
       boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-      textDecoration: 'none', // Added for Link
+      textDecoration: "none", // Added for Link
     },
     filtersContainer: {
       backgroundColor: "#f8f9fa",
@@ -289,7 +288,7 @@ export default function StockPage() {
       fontSize: "0.9rem",
       borderRadius: "4px",
       border: "1px solid #ced4da",
-      width: "100%",
+      width: "70%",
     },
     select: {
       height: "38px",

@@ -21,13 +21,13 @@ function debounce(func, wait) {
 
 export default function SalesHistoryPage() {
   const [orders, setOrders] = useState([]);
-  const [orderDetails, setOrderDetails] = useState({}); 
+  const [orderDetails, setOrderDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [deliveryFilter, setDeliveryFilter] = useState("");
   const [sortBy, setSortBy] = useState("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10); 
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [stats, setStats] = useState({
     totalSales: 0,
     totalOrders: 0,
@@ -119,7 +119,7 @@ export default function SalesHistoryPage() {
 
   const handleItemsPerPageChange = (event) => {
     setItemsPerPage(parseInt(event.target.value, 10));
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const debouncedSearch = useCallback(
@@ -133,11 +133,9 @@ export default function SalesHistoryPage() {
   }, [searchTerm, debouncedSearch]);
   useEffect(() => {
     setCurrentPage(1);
-  }, [deliveryFilter, sortBy, itemsPerPage]); 
-
+  }, [deliveryFilter, sortBy, itemsPerPage]);
 
   useEffect(() => {
-
     fetchSalesData();
   }, [fetchSalesData]);
 
@@ -230,7 +228,6 @@ export default function SalesHistoryPage() {
     });
   };
 
-
   const styles = {
     container: {
       marginBottom: "3rem",
@@ -297,7 +294,7 @@ export default function SalesHistoryPage() {
     },
     formControl: {
       display: "block",
-      width: "100%",
+      width: "80%",
       padding: "0.25rem 0.5rem",
       fontSize: "0.875rem",
       fontWeight: "400",
@@ -457,7 +454,6 @@ export default function SalesHistoryPage() {
     },
   };
 
-
   const Pagination = () => {
     if (totalPages <= 1) return null;
 
@@ -579,11 +575,9 @@ export default function SalesHistoryPage() {
     );
   };
 
-
   return (
     <div style={styles.container}>
       {loading && <LoadingSpinner />}
-
 
       <div style={styles.rowContainer}>
         <div style={styles.statCol}>
@@ -622,7 +616,6 @@ export default function SalesHistoryPage() {
         </div>
       </div>
 
-  
       <div style={styles.card}>
         <div style={styles.cardHeader}>
           <h5 style={styles.cardTitle}>
@@ -631,7 +624,6 @@ export default function SalesHistoryPage() {
           </h5>
         </div>
         <div style={styles.cardBody}>
-
           <div style={styles.filtersContainer}>
             <div style={styles.filterRow}>
               <div style={{ ...styles.filterCol, maxWidth: "30%" }}>
@@ -681,7 +673,6 @@ export default function SalesHistoryPage() {
             </div>
           </div>
 
-  
           <div style={styles.tableContainer}>
             <table style={styles.table}>
               <thead style={styles.tableHeader}>
