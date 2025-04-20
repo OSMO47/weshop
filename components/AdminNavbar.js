@@ -1,9 +1,8 @@
-// componentsNavbar.js
-'use client'; // ถ้ามี logic เช่น logout
+"use client";
 
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation'; // สำหรับ active link และ logout
-import Swal from 'sweetalert2';
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function AdminNavbar() {
   const pathname = usePathname();
@@ -11,59 +10,199 @@ export default function AdminNavbar() {
 
   const handleLogout = () => {
     Swal.fire({
-      title: 'ออกจากระบบ',
-      text: 'คุณต้องการออกจากระบบใช่หรือไม่?',
-      icon: 'question',
+      title: "ออกจากระบบ",
+      text: "คุณต้องการออกจากระบบใช่หรือไม่?",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'ใช่, ออกจากระบบ',
-      cancelButtonText: 'ยกเลิก',
+      confirmButtonText: "ใช่, ออกจากระบบ",
+      cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
-        // FIXME: Implement actual logout logic (clear session/token)
-        console.log('Logging out...');
-        // Redirect to login page
-        router.push('/login');
+        console.log("Logging out...");
+        router.push("/login");
       }
     });
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <div className="container">
-        <Link className="navbar-brand" href="/stock">
-          <i className="fas fa-user-shield me-2"></i>Admin Panel
+    <nav
+      style={{
+        backgroundColor: "#212529",
+        color: "#fff",
+        position: "sticky",
+        top: 0,
+        zIndex: 1020,
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1140px",
+          margin: "0 auto",
+          padding: "0.5rem 1rem",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Link
+          href="/stock"
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            textDecoration: "none",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <i
+            className="fas fa-user-shield"
+            style={{ marginRight: "0.5rem" }}
+          ></i>
+          Admin Panel
         </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarNav">
+
+        <button
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#adminNavbarNav"
+          style={{
+            backgroundColor: "transparent",
+            border: "1px solid rgba(255,255,255,.2)",
+            padding: "0.25rem 0.75rem",
+            fontSize: "1.25rem",
+            borderRadius: "0.25rem",
+            display: "none", 
+          }}
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="adminNavbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className={`nav-link ${pathname === '/stock' ? 'active' : ''}`} href="/stock">
-                <i className="fas fa-boxes me-1"></i>สต็อกสินค้า
+
+        <div
+          id="adminNavbarNav"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            marginTop: "0.5rem",
+          }}
+        >
+          <ul
+            style={{
+              listStyle: "none",
+              display: "flex",
+              paddingLeft: 0,
+              margin: 0,
+              marginRight: "auto",
+              gap: "1rem",
+            }}
+          >
+            <li>
+              <Link
+                href="/stock"
+                style={{
+                  textDecoration: "none",
+                  color: pathname === "/stock" ? "#0d6efd" : "#fff",
+                  fontWeight: pathname === "/stock" ? "bold" : "normal",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <i
+                  className="fas fa-boxes"
+                  style={{ marginRight: "0.25rem" }}
+                ></i>
+                สต็อกสินค้า
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className={`nav-link ${pathname === '/stock/add' ? 'active' : ''}`} href="/stock/add">
-                <i className="fas fa-plus-circle me-1"></i>เพิ่มสินค้า
+            <li>
+              <Link
+                href="/stock/add"
+                style={{
+                  textDecoration: "none",
+                  color: pathname === "/stock/add" ? "#0d6efd" : "#fff",
+                  fontWeight: pathname === "/stock/add" ? "bold" : "normal",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <i
+                  className="fas fa-plus-circle"
+                  style={{ marginRight: "0.25rem" }}
+                ></i>
+                เพิ่มสินค้า
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className={`nav-link ${pathname === '/sales-history' ? 'active' : ''}`} href="/sales-history">
-                <i className="fas fa-history me-1"></i>ประวัติการขาย
+            <li>
+              <Link
+                href="/sales-history"
+                style={{
+                  textDecoration: "none",
+                  color: pathname === "/sales-history" ? "#0d6efd" : "#fff",
+                  fontWeight: pathname === "/sales-history" ? "bold" : "normal",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <i
+                  className="fas fa-history"
+                  style={{ marginRight: "0.25rem" }}
+                ></i>
+                ประวัติการขาย
               </Link>
             </li>
-             <li className="nav-item">
-              <Link className="nav-link" href="/products" target="_blank"> {/* เปิดใน tab ใหม่ */}
-                <i className="fas fa-store me-1"></i>ดูหน้าร้าน
+            <li>
+              <Link
+                href="/products"
+                target="_blank"
+                style={{
+                  textDecoration: "none",
+                  color: "#fff",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <i
+                  className="fas fa-store"
+                  style={{ marginRight: "0.25rem" }}
+                ></i>
+                ดูหน้าร้าน
               </Link>
             </li>
           </ul>
-          <ul className="navbar-nav">
-             <li className="nav-item">
-                <button className="btn btn-outline-danger" onClick={handleLogout}>
-                    <i className="fas fa-sign-out-alt me-1"></i>ออกจากระบบ
-                </button>
+
+          <ul
+            style={{
+              listStyle: "none",
+              display: "flex",
+              paddingLeft: 0,
+              margin: 0,
+              gap: "1rem",
+            }}
+          >
+            <li>
+              <button
+                onClick={handleLogout}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "1px solid #dc3545",
+                  color: "#dc3545",
+                  padding: "0.375rem 0.75rem",
+                  borderRadius: "0.25rem",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <i
+                  className="fas fa-sign-out-alt"
+                  style={{ marginRight: "0.25rem" }}
+                ></i>
+                ออกจากระบบ
+              </button>
             </li>
           </ul>
         </div>

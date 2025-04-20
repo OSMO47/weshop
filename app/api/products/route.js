@@ -1,30 +1,25 @@
-// app/api/products/route.js
 import { NextResponse } from "next/server";
-import pool from "@/lib/db";
-import { writeFile, unlink } from "fs/promises"; // For file handling
+import { promisePool as pool } from '@/lib/db';
+import { writeFile, unlink } from "fs/promises";
 import path from "path";
-import { mkdir } from "fs/promises"; // To create directory if not exists
+import { mkdir } from "fs/promises";
 
-// Helper function for DB queries
 async function queryDB(sql, params = []) {
-  let connection; // ประกาศ connection นอก try block
+  let connection;
   try {
-    connection = await pool.getConnection(); // getConnection ควรจะทำงานได้ถ้า pool ถูก import ถูกต้อง
+    connection = await pool.getConnection();
     const [results] = await connection.execute(sql, params);
     return results;
   } catch (error) {
     console.error("Database Query Error in helper:", error);
-    // โยน error ต่อไปเพื่อให้ route handler จัดการ
     throw new Error(`Database operation failed in helper: ${error.message}`);
   } finally {
-    // ตรวจสอบว่า connection ถูกสร้างก่อนที่จะ release
     if (connection) {
       connection.release();
     }
   }
 }
 
-// GET: ดึงข้อมูลสินค้าทั้งหมดพร้อมชื่อประเภทและวัสดุ
 export async function GET(request) {
   try {
     const sql = `
@@ -45,9 +40,7 @@ export async function GET(request) {
   }
 }
 
-// POST: เพิ่มสินค้าใหม่ (รวม Upload รูปภาพ)
 export async function POST(request) {
-  // FIXME: Add Authentication Check (Admin Only)
   const formData = await request.formData();
   const imageFile = formData.get("image");
   const furId = formData.get("Fur_ID");
@@ -79,12 +72,11 @@ export async function POST(request) {
     );
   }
 
-  // --- File Upload Logic ---
   let imageUrl = null;
   let uploadPath = null;
   const uploadDir = path.join(process.cwd(), "public/images/furniture");
   try {
-    await mkdir(uploadDir, { recursive: true }); // Ensure directory exists
+    await mkdir(uploadDir, { recursive: true });
 
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -93,7 +85,7 @@ export async function POST(request) {
     uploadPath = path.join(uploadDir, filename);
 
     await writeFile(uploadPath, buffer);
-    imageUrl = `/images/furniture/${filename}`; // Relative path for client access
+    imageUrl = `/images/furniture/${filename}`;
   } catch (uploadError) {
     console.error("File Upload Error:", uploadError);
     return NextResponse.json(
@@ -105,7 +97,6 @@ export async function POST(request) {
     );
   }
 
-  // --- Database Insertion ---
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
@@ -116,14 +107,14 @@ export async function POST(request) {
     );
     if (existing.length > 0) {
       await connection.rollback();
-      if (uploadPath) await unlink(uploadPath); // Delete uploaded file if ID exists
+      if (uploadPath) await unlink(uploadPath);
       return NextResponse.json(
         {
           success: false,
           message: "รหัสสินค้านี้มีอยู่แล้ว (Product ID already exists)",
         },
         { status: 409 }
-      ); // 409 Conflict
+      );
     }
 
     const insertSql = `
@@ -151,7 +142,7 @@ export async function POST(request) {
     );
   } catch (dbError) {
     await connection.rollback();
-    if (uploadPath) await unlink(uploadPath); // Delete uploaded file on DB error
+    if (uploadPath) await unlink(uploadPath);
     console.error("API POST DB Error:", dbError);
     if (dbError.code === "ER_NO_REFERENCED_ROW_2") {
       return NextResponse.json(

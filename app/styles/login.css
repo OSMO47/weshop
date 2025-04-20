@@ -1,0 +1,146 @@
+/* styles/login.css - คุณสามารถนำไปใส่ในไฟล์ CSS หรือใช้ในรูปแบบ inline styles ก็ได้ */
+
+/* พื้นหลังแบบ Animated Gradient */
+.login-background {
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ปรับแต่ง Container */
+.login-container {
+  max-width: 400px;
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 16px !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.login-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* ไอคอนแบรนด์ */
+.brand-icon {
+  color: #0061ff;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 97, 255, 0.3));
+  transition: transform 0.5s ease;
+}
+
+.brand-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* ปรับแต่ง Input */
+.form-floating .form-control {
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  padding-left: 15px;
+  transition: all 0.3s;
+}
+
+.form-floating .form-control:focus {
+  border-color: #0061ff;
+  box-shadow: 0 0 0 0.25rem rgba(0, 97, 255, 0.25);
+}
+
+/* ปุ่มเข้าสู่ระบบ */
+.btn-login {
+  background: linear-gradient(135deg, #0061ff 0%, #60bfff 100%);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 12px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 97, 255, 0.3);
+}
+
+.btn-login:hover,
+.btn-login:focus {
+  background: linear-gradient(135deg, #0052d6 0%, #50a5eb 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 97, 255, 0.4);
+}
+
+.btn-login:active {
+  transform: translateY(1px);
+}
+
+/* ปุ่มกลับไปยังหน้าร้านค้า */
+.btn-back {
+  border-radius: 10px;
+  font-weight: 500;
+  padding: 10px;
+  transition: all 0.3s;
+  border-color: #d0d0d0;
+}
+
+.btn-back:hover {
+  background-color: #f8f9fa;
+  border-color: #c0c0c0;
+}
+
+/* ตัวแบ่งแนวนอน */
+.divider-container {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.divider-line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.divider-text {
+  padding: 0 1rem;
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+/* ไอคอนแสดงรหัสผ่าน */
+.password-toggle {
+  cursor: pointer;
+  padding: 8px;
+  opacity: 0.6;
+  transition: all 0.2s;
+}
+
+.password-toggle:hover {
+  opacity: 1;
+  color: #0061ff;
+}
+
+/* แอนิเมชันเข้าสู่หน้า */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-container {
+  animation: fadeInUp 0.6s ease-out;
+}

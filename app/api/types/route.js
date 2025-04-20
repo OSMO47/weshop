@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import pool from "@/lib/db";
-
+import { promisePool as pool } from '@/lib/db';
 export async function GET() {
   try {
     const sql = "SELECT id, typename FROM furtype ORDER BY typename ASC";

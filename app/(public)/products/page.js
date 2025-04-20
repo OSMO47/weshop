@@ -1,5 +1,5 @@
 // app/(public)/products/page.js
-"use client"; // จำเป็นสำหรับ Hooks และ Event Handlers
+"use client";
 
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
-// Utility function (debounce)
+
 function debounce(func, wait) {
   let timeout;
   return function executedFunction(...args) {
@@ -30,17 +30,106 @@ export default function ProductsPage() {
   const [typeFilter, setTypeFilter] = useState("");
   const [materialFilter, setMaterialFilter] = useState("");
 
-  // --- Fetch Data Functions ---
+  const styles = {
+    container: {
+      padding: "20px",
+      maxWidth: "1200px",
+      margin: "0 auto",
+    },
+    filterCard: {
+      backgroundColor: "#f8f9fa",
+      borderRadius: "10px",
+      border: "1px solid #dee2e6",
+      marginBottom: "1.5rem",
+      padding: "20px",
+      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+    },
+    formControl: {
+      border: "1px solid #ced4da",
+      borderRadius: "6px",
+      padding: "10px 12px",
+      fontSize: "0.95rem",
+      width: "100%",
+      transition: "border-color 0.2s ease",
+    },
+    searchInput: {
+      backgroundImage:
+        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E\")",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "right 10px center",
+      backgroundSize: "16px",
+      paddingRight: "35px",
+    },
+    formGroup: {
+      margin: "0",
+      padding: "0 10px",
+    },
+    select: {
+      appearance: "auto",
+      backgroundPosition: "right 10px center",
+      backgroundSize: "16px",
+      paddingRight: "35px",
+    },
+    row: {
+      display: "flex",
+      flexWrap: "wrap",
+      margin: "0 -10px",
+    },
+    col: {
+      flex: "1 0 0%",
+      padding: "0 10px",
+      marginBottom: "15px",
+      minWidth: "250px",
+    },
+    productRow: {
+      display: "flex",
+      flexWrap: "wrap",
+      margin: "0 -12px",
+    },
+    productCol: {
+      flex: "0 0 25%",
+      maxWidth: "25%",
+      padding: "0 12px",
+      marginBottom: "24px",
+      transition: "transform 0.2s ease",
+      ":hover": {
+        transform: "translateY(-5px)",
+      },
+    },
+    emptyResults: {
+      padding: "50px 20px",
+      backgroundColor: "#f8f9fa",
+      borderRadius: "10px",
+      textAlign: "center",
+      width: "100%",
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+    },
+    emptyIcon: {
+      marginRight: "8px",
+      color: "#6c757d",
+    },
+    emptyTitle: {
+      fontSize: "1.25rem",
+      fontWeight: "500",
+      marginBottom: "10px",
+      color: "#343a40",
+    },
+    emptyText: {
+      color: "#6c757d",
+      fontSize: "0.95rem",
+    },
+  };
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [productsRes, typesRes, materialsRes] = await Promise.all([
-        axios.get("/api/products"), // เรียก Next.js API route
+        axios.get("/api/products"),
         axios.get("/api/types"),
         axios.get("/api/materials"),
       ]);
       setProducts(productsRes.data);
-      setFilteredProducts(productsRes.data); // Initialize filtered list
+      setFilteredProducts(productsRes.data);
       setTypes(typesRes.data);
       setMaterials(materialsRes.data);
     } catch (error) {
@@ -51,7 +140,6 @@ export default function ProductsPage() {
     }
   }, []);
 
-  // --- Filter Logic ---
   const filterProducts = useCallback(() => {
     const lowerSearchTerm = searchTerm.toLowerCase();
     const filtered = products.filter(
@@ -63,59 +151,54 @@ export default function ProductsPage() {
     setFilteredProducts(filtered);
   }, [products, searchTerm, typeFilter, materialFilter]);
 
-  // Debounced search handler
   const debouncedFilter = useCallback(debounce(filterProducts, 300), [
     filterProducts,
   ]);
 
-  // --- Effects ---
   useEffect(() => {
-    fetchData(); // Fetch initial data
+    fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    debouncedFilter(); // Apply filters when dependencies change
+    debouncedFilter();
   }, [searchTerm, typeFilter, materialFilter, debouncedFilter]);
 
-  // --- Buy Product Logic ---
   const handleBuyClick = async (product) => {
     if (!product || parseInt(product.Stocks) <= 0) return;
 
-    // Logic การแสดง Swal Form (คล้ายเดิม แต่ใช้ React)
     const { value: formData, isConfirmed } = await Swal.fire({
       title: "กรอกข้อมูลการสั่งซื้อ",
       html: `
-            <div class="text-start">
-                <div class="mb-3">
-                    <label class="form-label">ชื่อ-นามสกุล *</label>
-                    <input type="text" id="swal-name" class="form-control" required>
+            <div style="text-align: left;">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500;">ชื่อ-นามสกุล *</label>
+                    <input type="text" id="swal-name" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">เบอร์โทรศัพท์ *</label>
-                    <input type="tel" id="swal-phone" class="form-control" pattern="[0-9]{10}" required>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500;">เบอร์โทรศัพท์ *</label>
+                    <input type="tel" id="swal-phone" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;" pattern="[0-9]{10}" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">วิธีรับสินค้า *</label>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500;">วิธีรับสินค้า *</label>
                     <div>
-                        <input type="radio" name="delivery" id="swal-pickup" value="pickup" class="form-check-input me-1" required>
-                        <label for="swal-pickup" class="form-check-label me-3">รับที่ร้าน (ฟรี)</label>
-                        <input type="radio" name="delivery" id="swal-delivery" value="delivery" class="form-check-input me-1">
-                        <label for="swal-delivery" class="form-check-label">จัดส่ง (+฿100)</label>
+                        <input type="radio" name="delivery" id="swal-pickup" value="pickup" style="margin-right: 5px;" required>
+                        <label for="swal-pickup" style="margin-right: 15px;">รับที่ร้าน (ฟรี)</label>
+                        <input type="radio" name="delivery" id="swal-delivery" value="delivery" style="margin-right: 5px;">
+                        <label for="swal-delivery">จัดส่ง (+฿100)</label>
                     </div>
                 </div>
-                <div id="swal-address-div" class="mb-3 d-none">
-                    <label class="form-label">ที่อยู่จัดส่ง *</label>
-                    <textarea id="swal-address" class="form-control" rows="3"></textarea>
+                <div id="swal-address-div" style="margin-bottom: 15px; display: none;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500;">ที่อยู่จัดส่ง *</label>
+                    <textarea id="swal-address" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;" rows="3"></textarea>
                 </div>
             </div>
         `,
       didOpen: () => {
-        // Add event listener to show/hide address field
         const pickupRadio = Swal.getPopup().querySelector("#swal-pickup");
         const deliveryRadio = Swal.getPopup().querySelector("#swal-delivery");
         const addressDiv = Swal.getPopup().querySelector("#swal-address-div");
         const listener = () => {
-          addressDiv.classList.toggle("d-none", !deliveryRadio.checked);
+          addressDiv.style.display = deliveryRadio.checked ? "block" : "none";
         };
         pickupRadio.addEventListener("change", listener);
         deliveryRadio.addEventListener("change", listener);
@@ -151,7 +234,6 @@ export default function ProductsPage() {
     if (isConfirmed && formData) {
       setLoading(true);
       try {
-        // สร้าง IDs (อาจทำใน Backend)
         const custId = "C" + Date.now().toString().slice(-6);
         const invoiceId = "INV" + Date.now().toString().slice(-8);
         const orderDetailId = "OD" + Date.now().toString().slice(-8);
@@ -159,7 +241,6 @@ export default function ProductsPage() {
         const shippingCost = formData.delivery === "delivery" ? 100 : 0;
         const totalPrice = parseFloat(product.Prices) + shippingCost;
 
-        // 1. สร้าง Customer
         await axios.post("/api/customers", {
           CustID: custId,
           CustName: formData.name,
@@ -167,28 +248,24 @@ export default function ProductsPage() {
           Address: formData.address,
         });
 
-        // 2. สร้าง Order
         await axios.post("/api/orders", {
           InvoiceID: invoiceId,
           CustID: custId,
           TotalPrice: totalPrice,
           deliveryMethod: formData.delivery,
-          orderDate: new Date().toISOString().split("T")[0], // ควรทำใน Backend
+          orderDate: new Date().toISOString().split("T")[0],
         });
 
-        // 3. สร้าง OrderDetail
         await axios.post("/api/orders/details", {
           OrderDetailID: orderDetailId,
           InvoiceID: invoiceId,
           Fur_ID: product.Fur_ID,
-          Qty: 1, // สมมติสั่งทีละ 1
+          Qty: 1,
           Price: product.Prices,
         });
 
-        // 4. Update Stock (ควรทำพร้อมกับสร้าง OrderDetail ใน Transaction เดียว)
         await axios.put(`/api/products/${product.Fur_ID}`, {
-          // Endpoint สำหรับ Update Stock
-          stockChange: -1, // ส่งจำนวนที่เปลี่ยนแปลง
+          stockChange: -1,
         });
 
         Swal.fire(
@@ -196,7 +273,7 @@ export default function ProductsPage() {
           `สั่งซื้อสินค้าเรียบร้อย เลขที่: ${invoiceId}`,
           "success"
         );
-        fetchData(); // Refresh ข้อมูล
+        fetchData();
       } catch (error) {
         console.error("Order error:", error);
         Swal.fire("ผิดพลาด", "ไม่สามารถดำเนินการสั่งซื้อได้", "error");
@@ -206,26 +283,57 @@ export default function ProductsPage() {
     }
   };
 
-  // --- Render ---
+  const getColumnStyle = () => {
+    const width = typeof window !== "undefined" ? window.innerWidth : 1200;
+    let colStyle = { ...styles.productCol };
+
+    if (width < 576) {
+      colStyle = {
+        ...colStyle,
+        flex: "0 0 100%",
+        maxWidth: "100%",
+      };
+    } else if (width < 768) {
+      colStyle = {
+        ...colStyle,
+        flex: "0 0 50%",
+        maxWidth: "50%",
+      };
+    } else if (width < 992) {
+      colStyle = {
+        ...colStyle,
+        flex: "0 0 33.333%",
+        maxWidth: "33.333%",
+      };
+    }
+
+    return colStyle;
+  };
+
   return (
     <div>
-      <Navbar isPublic={true} /> {/* ส่ง prop บอกว่าเป็นหน้า Public */}
-      <div className="container my-4">
-        {/* Filters */}
-        <div className="card card-body shadow-sm mb-4">
-          <div className="row g-3 align-items-center">
-            <div className="col-md-5">
+      <Navbar isPublic={true} />
+
+      <div style={styles.container}>
+        <div style={styles.filterCard}>
+          <div style={styles.row}>
+            <div
+              style={{
+                ...styles.col,
+                flex: "2 1 300px",
+              }}
+            >
               <input
                 type="text"
-                className="form-control"
+                style={{ ...styles.formControl, ...styles.searchInput }}
                 placeholder="ค้นหาสินค้า..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="col-md-3">
+            <div style={styles.col}>
               <select
-                className="form-select"
+                style={{ ...styles.formControl, ...styles.select }}
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
               >
@@ -237,9 +345,9 @@ export default function ProductsPage() {
                 ))}
               </select>
             </div>
-            <div className="col-md-3">
+            <div style={styles.col}>
               <select
-                className="form-select"
+                style={{ ...styles.formControl, ...styles.select }}
                 value={materialFilter}
                 onChange={(e) => setMaterialFilter(e.target.value)}
               >
@@ -251,20 +359,24 @@ export default function ProductsPage() {
                 ))}
               </select>
             </div>
-            {/* Optional: Clear filters button */}
           </div>
         </div>
 
-        {/* Product Grid */}
         {loading ? (
           <LoadingSpinner />
         ) : (
-          <div className="row">
+          <div style={styles.productRow}>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
                 <div
                   key={product.Fur_ID}
-                  className="col-lg-3 col-md-4 col-sm-6 mb-4"
+                  style={getColumnStyle()}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = "translateY(-5px)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
                 >
                   <ProductCard
                     product={product}
@@ -273,102 +385,12 @@ export default function ProductsPage() {
                 </div>
               ))
             ) : (
-              <div className="col-12 text-center mt-5">
-                <h4>
-                  <i className="fas fa-search me-2"></i>ไม่พบสินค้า
+              <div style={styles.emptyResults}>
+                <h4 style={styles.emptyTitle}>
+                  <i className="fas fa-search" style={styles.emptyIcon}></i>
+                  ไม่พบสินค้า
                 </h4>
-                <p className="text-muted">ลองปรับคำค้นหาหรือตัวกรอง</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-      {/* Footer or Contact Section */}
-    </div>
-  );
-  const globalStyles = `
-    .products-container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .filter-card {
-      background-color: #f8f9fa;
-      border-radius: 10px;
-      border: 1px solid #dee2e6;
-      margin-bottom: 1.5rem;
-    }
-
-    .product-card-col {
-      transition: transform 0.2s ease;
-    }
-
-    .product-card-col:hover {
-      transform: translateY(-5px);
-    }
-
-    .no-products {
-      padding: 50px 20px;
-      background-color: #f8f9fa;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    @media (max-width: 768px) {
-      .filter-card .row {
-        gap: 15px;
-      }
-      
-      .product-card-col {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-      }
-    }
-
-    @media (max-width: 576px) {
-      .form-select {
-        margin-top: 10px;
-      }
-    }
-  `;
-
-  return (
-    <div>
-      <Navbar isPublic={true} />
-
-      {/* เพิ่ม global styles */}
-      <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
-
-      <div className="products-container">
-        {/* Filter Section */}
-        <div className="filter-card card card-body shadow-sm mb-4">
-          {/* ... existing filter code ... */}
-        </div>
-
-        {/* Product Grid */}
-        {loading ? (
-          <LoadingSpinner />
-        ) : (
-          <div className="row">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <div
-                  key={product.Fur_ID}
-                  className="product-card-col col-lg-3 col-md-4 col-sm-6 mb-4"
-                >
-                  <ProductCard
-                    product={product}
-                    onBuyClick={() => handleBuyClick(product)}
-                  />
-                </div>
-              ))
-            ) : (
-              <div className="no-products">
-                <h4>
-                  <i className="fas fa-search me-2"></i>ไม่พบสินค้า
-                </h4>
-                <p className="text-muted">ลองปรับคำค้นหาหรือตัวกรอง</p>
+                <p style={styles.emptyText}>ลองปรับคำค้นหาหรือตัวกรอง</p>
               </div>
             )}
           </div>

@@ -1,0 +1,261 @@
+/* app/(admin)/stock/StockPage.module.css */
+
+.pageWrapper {
+  /* อาจเพิ่ม padding หรือ margin รอบนอกสุด ถ้าต้องการ */
+}
+
+.statsRow {
+  /* ใช้ g-3 จาก Bootstrap อยู่แล้ว อาจไม่ต้องเพิ่มอะไรมาก */
+  margin-bottom: 1.5rem; /* เทียบเท่า mb-4 */
+}
+
+.mainCard {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* เทียบเท่า shadow-sm */
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem; /* เพิ่ม margin ด้านล่าง card หลัก */
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.25rem;
+  background-color: #f8f9fa; /* เทียบเท่า bg-light */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.headerTitle {
+  margin-bottom: 0; /* เทียบเท่า mb-0 */
+  font-size: 1.1rem; /* ปรับขนาดตามต้องการ */
+  font-weight: 500; /* เพิ่มความหนา */
+}
+
+.headerActions {
+  margin-top: 0.5rem; /* สำหรับ mobile */
+}
+
+/* Responsive adjustments for header actions based on Bootstrap 'md' breakpoint */
+@media (min-width: 768px) {
+  .headerActions {
+    margin-top: 0; /* เทียบเท่า mt-md-0 */
+  }
+}
+
+.addButton {
+  /* ถ้าต้องการ custom ปุ่มเพิ่มสินค้า สามารถเพิ่มได้ที่นี่ */
+  /* อาจจะใช้ร่วมกับ class ของ bootstrap หรือแทนที่ไปเลย */
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem; /* เทียบเท่า btn-sm */
+  border-radius: 0.25rem;
+  background-color: #0d6efd; /* primary */
+  color: white;
+  border: 1px solid #0d6efd;
+  text-decoration: none; /* สำหรับ Link component */
+  display: inline-flex; /* จัด icon กับ text */
+  align-items: center;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+.addButton:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+.addButton i {
+  /* จัดระยะ icon */
+  margin-right: 0.35rem; /* เทียบเท่า me-1 */
+}
+
+.filterArea {
+  background-color: #f8f9fa; /* bg-light */
+  padding: 1rem; /* p-3 */
+  border-radius: 0.25rem; /* rounded */
+  margin-bottom: 1rem; /* mb-3 */
+}
+
+.stockTable {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+  vertical-align: middle; /* align-middle */
+  border-collapse: collapse;
+  font-size: 0.875rem; /* table-sm */
+}
+
+.stockTable th,
+.stockTable td {
+  padding: 0.5rem 0.5rem; /* padding ของ table-sm */
+  border-top: 1px solid #dee2e6;
+}
+
+.stockTable thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+  background-color: #f8f9fa; /* table-light */
+  font-weight: 600; /* ทำให้หัวตารางหนาขึ้นเล็กน้อย */
+}
+
+.stockTable tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.075); /* table-hover */
+}
+
+.productImage {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 1px solid #dee2e6; /* เทียบเท่า img-thumbnail */
+  border-radius: 0.25rem; /* เทียบเท่า img-thumbnail */
+  vertical-align: middle; /* ช่วยจัดกลางใน cell */
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+.statusBadge i {
+  margin-right: 0.25rem;
+}
+
+.statusSuccess {
+  composes: statusBadge; /* สืบทอดคุณสมบัติจาก statusBadge */
+  background-color: #198754; /* bg-success */
+}
+
+.statusWarning {
+  composes: statusBadge;
+  background-color: #ffc107; /* bg-warning */
+  color: #000; /* text-dark */
+}
+
+.statusDanger {
+  composes: statusBadge;
+  background-color: #dc3545; /* bg-danger */
+}
+
+.actionsCell {
+  text-align: center; /* text-center */
+}
+
+.actionButton {
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.5rem; /* btn-sm */
+  font-size: 0.875rem; /* btn-sm */
+  border-radius: 0.2rem; /* btn-sm */
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin-right: 0.25rem; /* เทียบเท่า me-1 สำหรับปุ่มแรก */
+}
+.actionButton:last-child {
+  margin-right: 0; /* ปุ่มสุดท้ายไม่มี margin ขวา */
+}
+
+.editButton {
+  composes: actionButton;
+  color: #0d6efd; /* outline-primary */
+  border-color: #0d6efd;
+}
+.editButton:hover {
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.deleteButton {
+  composes: actionButton;
+  color: #dc3545; /* outline-danger */
+  border-color: #dc3545;
+}
+.deleteButton:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.noDataCell {
+  text-align: center; /* text-center */
+  color: #6c757d; /* text-muted */
+  padding-top: 2rem; /* py-4 */
+  padding-bottom: 2rem; /* py-4 */
+}
+
+/* --- SweetAlert Custom Styles (ถ้าต้องการ) --- */
+/* สามารถเพิ่ม CSS selector เพื่อปรับแต่ง SweetAlert ได้ */
+/* เช่น ปรับ .swal2-popup, .swal2-title, .swal2-html-container */
+/* หรือใช้ class ที่ใส่ใน html ของ SweetAlert */
+.swalInputLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.swalSelect,
+.swalInput {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+.swalHelpText {
+  font-size: 0.875em;
+  color: #6c757d;
+}
+.swalRow {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.swalRow:last-child {
+  margin-bottom: 0;
+}
+
+/* ใช้ bootstrap class ใน SweetAlert ต่อไปก็ได้ หรือจะสร้าง style เองแบบนี้ */
+.swalUpdateForm {
+  text-align: left;
+}
+.swalUpdateForm .mb-3 {
+  margin-bottom: 1rem !important;
+}
+.swalUpdateForm .form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.swalUpdateForm .form-select,
+.swalUpdateForm .form-control {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin: 0 auto; /* This centers the element horizontally */
+}
+.swalUpdateForm .text-muted {
+  font-size: 0.875em;
+  color: #6c757d;
+}

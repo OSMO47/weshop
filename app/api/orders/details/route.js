@@ -1,11 +1,7 @@
-// app/api/orders/details/route.js
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import { promisePool as pool } from '@/lib/db';
 
-// POST: สร้างข้อมูล Order Detail
-// FIXME: ควรทำใน Transaction เดียวกับการสร้าง Order และ Update Stock
 export async function POST(request) {
-    // ไม่จำเป็นต้องมี Auth เพราะสร้างตอนลูกค้าสั่งซื้อ
     try {
         const { OrderDetailID, InvoiceID, Fur_ID, Qty, Price } = await request.json();
 
@@ -34,8 +30,8 @@ export async function POST(request) {
             return NextResponse.json({ success: false, message: "Order Detail ID already exists" }, { status: 409 });
         }
         if (error.code === 'ER_NO_REFERENCED_ROW_2') {
-             // Check which foreign key failed
-             if (error.message.includes('orderdetail_ibfk_1')) { // Constraint name from SQL
+    
+             if (error.message.includes('orderdetail_ibfk_1')) { 
                 return NextResponse.json({ success: false, message: "Invalid Invoice ID reference" }, { status: 400 });
              } else if (error.message.includes('orderdetail_ibfk_2')) {
                  return NextResponse.json({ success: false, message: "Invalid Furniture ID reference" }, { status: 400 });

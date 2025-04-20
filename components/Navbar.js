@@ -1,39 +1,125 @@
-// components/Navbar.js
-'use client'; // ใช้ usePathname
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function Navbar() { // ไม่ต้องรับ prop isPublic แล้ว
+export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-      <div className="container">
-        <Link className="navbar-brand fw-bold fs-4" href="/">
-          <i className="fas fa-couch me-2 text-primary"></i>OF Furniture
+    <nav
+      style={{
+        backgroundColor: "white",
+        boxShadow: "0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)",
+        position: "sticky",
+        top: 0,
+        zIndex: 1020,
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1140px",
+          margin: "0 auto",
+          padding: "0.5rem 1rem",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Link
+          href="/products"
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+            textDecoration: "none",
+            color: "black",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <i
+            className="fas fa-couch"
+            style={{ marginRight: "0.5rem", color: "#0d6efd" }}
+          ></i>
+          ร้านน้องเฟรน
         </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNavbarNav">
+
+        <button
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#publicNavbarNav"
+          style={{
+            backgroundColor: "transparent",
+            border: "1px solid rgba(0,0,0,.1)",
+            padding: "0.25rem 0.75rem",
+            fontSize: "1.25rem",
+            borderRadius: "0.25rem",
+            display: "none", // ซ่อนไว้หากไม่ทำ responsive จริง
+          }}
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="publicNavbarNav">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className={`nav-link ${pathname === '/' || pathname === '/products' ? 'active' : ''}`} href="/products">
-                 <i className="fas fa-shopping-bag me-1"></i>สินค้า
-              </Link>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/#contact"> {/* ใช้ anchor link ไปยังส่วน Contact ในหน้าหลัก */}
-                 <i className="fas fa-phone me-1"></i>ติดต่อเรา
-              </a>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link ${pathname === '/login' ? 'active' : ''}`} href="/login">
-                <i className="fas fa-sign-in-alt me-1"></i>เข้าสู่ระบบ
-              </Link>
-            </li>
-          </ul>
+
+        <div
+          id="publicNavbarNav"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            marginLeft: "auto",
+            gap: "1rem",
+          }}
+        >
+          <Link
+            href="/products"
+            style={{
+              textDecoration: "none",
+              color:
+                pathname === "/" || pathname === "/products"
+                  ? "#0d6efd"
+                  : "#000",
+              fontWeight:
+                pathname === "/" || pathname === "/products"
+                  ? "bold"
+                  : "normal",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <i
+              className="fas fa-shopping-bag"
+              style={{ marginRight: "0.25rem" }}
+            ></i>
+            สินค้า
+          </Link>
+
+          <a
+            href="/#contact"
+            style={{
+              textDecoration: "none",
+              color: "#000",
+              display: "flex",
+              alignItems: "center",
+            }}
+          ></a>
+
+          <Link
+            href="/login"
+            style={{
+              textDecoration: "none",
+              color: pathname === "/login" ? "#0d6efd" : "#000",
+              fontWeight: pathname === "/login" ? "bold" : "normal",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <i
+              className="fas fa-sign-in-alt"
+              style={{ marginRight: "0.25rem" }}
+            ></i>
+            เข้าสู่ระบบ
+          </Link>
         </div>
       </div>
     </nav>

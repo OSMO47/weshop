@@ -1,10 +1,7 @@
-// app/api/orders/history/route.js
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import { promisePool as pool } from '@/lib/db';
 
-// GET: ดึงข้อมูล Order ทั้งหมด พร้อมข้อมูลลูกค้า
 export async function GET(request) {
-    // FIXME: Add Authentication Check (Admin Only)
     try {
         const sql = `
             SELECT
@@ -20,8 +17,7 @@ export async function GET(request) {
             LEFT JOIN customer c ON o.CustID = c.CustID
             ORDER BY o.orderDate DESC, o.InvoiceID DESC
         `;
-        const orders = await pool.query(sql); // Use query for simpler SELECT
-        // pool.query returns [rows, fields], we only need rows ([0])
+        const orders = await pool.query(sql);
         return NextResponse.json(orders[0]);
     } catch (error) {
         console.error("API GET /api/orders/history Error:", error);

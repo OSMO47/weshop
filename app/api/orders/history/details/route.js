@@ -1,11 +1,6 @@
-// app/api/orders/history/details/route.js
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
-
-// GET: ดึงข้อมูล Order Detail ทั้งหมด พร้อมข้อมูลสินค้า
+import { promisePool as pool } from '@/lib/db';
 export async function GET(request) {
-    // FIXME: Add Authentication Check (Admin Only)
-    // FIXME: This might be inefficient for large datasets. Consider fetching details per order.
     try {
         const sql = `
             SELECT
